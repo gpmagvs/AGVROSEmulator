@@ -25,6 +25,9 @@
             SetState(IOMap.SUBMARINE_IOMAP_INPUTS.LeftProtection_Area_Sensor_3, true);
             SetState(IOMap.SUBMARINE_IOMAP_INPUTS.Cst_Sensor_1, true);
             SetState(IOMap.SUBMARINE_IOMAP_INPUTS.Cst_Sensor_2, true);
+            SetState(IOMap.SUBMARINE_IOMAP_INPUTS.Cst_Sensor_3, true);
+            SetState(IOMap.SUBMARINE_IOMAP_INPUTS.Cst_Sensor_4, true);
+            SetState(IOMap.SUBMARINE_IOMAP_INPUTS.FrontProtection_Obstacle_Sensor, true);
             SetState(IOMap.SUBMARINE_IOMAP_INPUTS.EQ_GO, true);
         }
     }

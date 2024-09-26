@@ -37,6 +37,7 @@ namespace AGVROSEmulator.IOModule
         protected ModbusTcpSlave? slave;
         RosSocket rosSocket;
         string sickOutputPathsMsgID = "";
+        public bool HSEqNoReplySimulation { get; private set; } = false;
 
         public WagoIOModule()
         {
@@ -108,6 +109,8 @@ namespace AGVROSEmulator.IOModule
                     }
                     else
                     {
+                        if (HSEqNoReplySimulation)
+                            return;
                         SetState(IOMap.SUBMARINE_IOMAP_INPUTS.EQ_L_REQ, true);
                         SetState(IOMap.SUBMARINE_IOMAP_INPUTS.EQ_U_REQ, true);
                     }
@@ -335,6 +338,15 @@ namespace AGVROSEmulator.IOModule
         public virtual void FrontLaserArea3Trigger()
         {
             SetState(IOMap.SUBMARINE_IOMAP_INPUTS.FrontProtection_Area_Sensor_3, false);
+        }
+        internal void PIO_HS_EQ_NO_REPLY()
+        {
+            HSEqNoReplySimulation = true;
+        }
+
+        internal void PIO_HS_EQ_NORMAL_REPLY()
+        {
+            HSEqNoReplySimulation = false;
         }
     }
 }

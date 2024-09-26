@@ -10,7 +10,7 @@ namespace AGVROSEmulator.AGVRos
 {
     public class AGVEmu : Configurable
     {
-        ModuleInformation moduleInfo = new ModuleInformation();
+        internal ModuleInformation moduleInfo = new ModuleInformation();
         RosSocket rosSocket;
         TaskCommandActionServer actionServer;
 
@@ -167,5 +167,10 @@ namespace AGVROSEmulator.AGVRos
             return true;
         }
 
+        internal void SetTagReader(uint tag)
+        {
+            actionServer.barcodeReadTag = (int)tag;
+            //moduleInfo.reader.tagID = tag;
+        }
     }
 }

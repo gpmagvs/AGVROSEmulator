@@ -46,7 +46,7 @@ switch (ConfigurationHelper.Instance.AgvType)
     default:
         break;
 }
-_ = Utility.IOModule.Connect(Port: ConfigurationHelper.Instance.WagoPort);
+_ = Utility.IOModule.Connect("0.0.0.0", Port: ConfigurationHelper.Instance.WagoPort);
 
 Console.Title = "®Æ±±º“¿¿æπV1";
 

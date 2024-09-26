@@ -130,5 +130,17 @@ namespace AGVROSEmulator.Controllers
         {
             IOModule.Handshake_Signals_Reset();
         }
+
+
+        [HttpPost("PIO_HS_EQ_NO_REPLY")]
+        public async Task PIO_HS_EQ_NO_REPLY()
+        {
+            IOModule.PIO_HS_EQ_NO_REPLY();
+        }
+        [HttpPost("PIO_HS_EQ_NORMAL_REPLY")]
+        public async Task PIO_HS_EQ_NORMAL_REPLY()
+        {
+            IOModule.PIO_HS_EQ_NORMAL_REPLY();
+        }
     }
 }

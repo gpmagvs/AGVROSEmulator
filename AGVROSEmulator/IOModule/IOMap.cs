@@ -77,6 +77,8 @@
             EQ_GO = 0x0028,
             Cst_Sensor_1 = 0x002D,
             Cst_Sensor_2 = 0x002E,
+            Cst_Sensor_3 = 0x002A,
+            Cst_Sensor_4 = 0x002B,
             FrontProtection_Obstacle_Sensor = 0x002F,
             FrontProtection_Area_Sensor_1 = 0x0030,
             FrontProtection_Area_Sensor_2 = 0x0031,
@@ -89,7 +91,7 @@
         }
 
 
-        public enum DEMO_INSPECTION_AGV_IOMAP_OUTPUTS 
+        public enum DEMO_INSPECTION_AGV_IOMAP_OUTPUTS
         {
             FrontLsrBypass = 0x0000,
             BackLsrBypass = 0x0001,
@@ -141,7 +143,7 @@
         }
 
 
-        public enum DEMO_INSPECTION_AGV_IOMAP_INPUTS 
+        public enum DEMO_INSPECTION_AGV_IOMAP_INPUTS
         {
             FrontProtectionAreaSensor1 = 0x0000,
             FrontProtectionAreaSensor2 = 0x0001,
