@@ -65,6 +65,7 @@ namespace AGVROSEmulator.AGVRos
                 while (true)
                 {
                     moduleInfo.nav_state.lastVisitedNode.data = actionServer.lastVisitedTag;
+                    moduleInfo.nav_state.robotPose.header.stamp.secs = (uint)DateTime.Now.Ticks;
                     moduleInfo.nav_state.robotPose.pose.position = actionServer.currentCoordination;
                     moduleInfo.nav_state.robotPose.pose.orientation = actionServer.orientation;
                     moduleInfo.reader.tagID = (uint)actionServer.barcodeReadTag;

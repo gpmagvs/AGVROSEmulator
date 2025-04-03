@@ -142,5 +142,11 @@ namespace AGVROSEmulator.Controllers
         {
             IOModule.PIO_HS_EQ_NORMAL_REPLY();
         }
+
+        [HttpPost("TrayNoMounted")]
+        public async Task TrayNoMounted()
+        {
+
+        }
     }
 }

@@ -348,5 +348,11 @@ namespace AGVROSEmulator.IOModule
         {
             HSEqNoReplySimulation = false;
         }
+
+        internal void TrayNoMounted()
+        {
+            SetState(IOMap.SUBMARINE_IOMAP_INPUTS.Cst_Sensor_1, true);
+            SetState(IOMap.SUBMARINE_IOMAP_INPUTS.Cst_Sensor_2, true);
+        }
     }
 }
