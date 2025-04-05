@@ -2,7 +2,7 @@
 {
     public class IOMap
     {
-        public enum SUBMARINE_IOMAP_OUTPUTS
+        public enum OUTPUTS
         {
             EMU_EQ_L_REQ = 0x0000,
             EMU_EQ_U_REQ = 0x0001,
@@ -53,7 +53,7 @@
             Back_Protection_Sensor_IN_4 = 0x003E,
             Back_Protection_Sensor_CIN_4 = 0x003F
         }
-        public enum SUBMARINE_IOMAP_INPUTS
+        public enum INPUTS
         {
             EMO = 0x0008,
             Bumper_Sensor = 0x000A,
@@ -68,6 +68,7 @@
             Horizon_Motor_Busy_2 = 0x0017,
             Vertical_Motor_Alarm = 0x0018,
             Vertical_Motor_Busy = 0x0019,
+            Vertical_Home_Pose = 0x001B,
             EQ_L_REQ = 0x0020,
             EQ_U_REQ = 0x0021,
             EQ_READY = 0x0023,
@@ -89,6 +90,7 @@
             BackProtection_Area_Sensor_3 = 0x0036,
             BackProtection_Area_Sensor_4 = 0x0037,
         }
+
 
 
         public enum DEMO_INSPECTION_AGV_IOMAP_OUTPUTS
@@ -141,8 +143,6 @@
             BackProtectionSensorIN4 = 0x0036,
             BackProtectionSensorCIN4 = 0x0037
         }
-
-
         public enum DEMO_INSPECTION_AGV_IOMAP_INPUTS
         {
             FrontProtectionAreaSensor1 = 0x0000,

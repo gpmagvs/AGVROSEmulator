@@ -84,9 +84,9 @@ namespace AGVROSEmulator.Controllers
         [HttpPost("EQ_GO_Flicker")]
         public async Task EQ_GO_Flicker(int flick_time_ms = 100)
         {
-            IOModule.SetState(IOMap.SUBMARINE_IOMAP_INPUTS.EQ_GO, false);
+            IOModule.SetState(IOMap.INPUTS.EQ_GO, false);
             await Task.Delay(flick_time_ms);
-            IOModule.SetState(IOMap.SUBMARINE_IOMAP_INPUTS.EQ_GO, true);
+            IOModule.SetState(IOMap.INPUTS.EQ_GO, true);
         }
 
 
@@ -94,26 +94,26 @@ namespace AGVROSEmulator.Controllers
         [HttpPost("E84_EQ_L_REQ")]
         public async Task E84_EQ_L_REQ(bool state)
         {
-            IOModule.SetState(IOMap.SUBMARINE_IOMAP_INPUTS.EQ_L_REQ, state);
+            IOModule.SetState(IOMap.INPUTS.EQ_L_REQ, state);
         }
 
         [HttpPost("E84_EQ_READY")]
         public async Task E84_EQ_READY(bool state)
         {
-            IOModule.SetState(IOMap.SUBMARINE_IOMAP_INPUTS.EQ_READY, state);
+            IOModule.SetState(IOMap.INPUTS.EQ_READY, state);
         }
 
         [HttpPost("E84_EQ_L_REQ_Flick")]
         public async Task E84_EQ_L_REQ_Flick()
         {
-            IOModule.SetState(IOMap.SUBMARINE_IOMAP_INPUTS.EQ_L_REQ, false);
+            IOModule.SetState(IOMap.INPUTS.EQ_L_REQ, false);
             await Task.Delay(500);
 
-            IOModule.SetState(IOMap.SUBMARINE_IOMAP_INPUTS.EQ_L_REQ, true);
+            IOModule.SetState(IOMap.INPUTS.EQ_L_REQ, true);
             await Task.Delay(50);
-            IOModule.SetState(IOMap.SUBMARINE_IOMAP_INPUTS.EQ_L_REQ, false);
+            IOModule.SetState(IOMap.INPUTS.EQ_L_REQ, false);
             await Task.Delay(50);
-            IOModule.SetState(IOMap.SUBMARINE_IOMAP_INPUTS.EQ_L_REQ, true);
+            IOModule.SetState(IOMap.INPUTS.EQ_L_REQ, true);
         }
 
 
@@ -147,6 +147,11 @@ namespace AGVROSEmulator.Controllers
         public async Task TrayNoMounted()
         {
 
+        }
+        [HttpPost("VerticalHomePose")]
+        public async Task VerticalHomePose()
+        {
+            IOModule.VerticalHomePose();
         }
     }
 }

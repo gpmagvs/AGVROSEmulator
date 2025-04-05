@@ -35,6 +35,10 @@ namespace AGVROSEmulator.AGVRos
         {
             moduleInfo = new ModuleInformation()
             {
+                Action_Driver = new DriverState
+                {
+                    position = 0,
+                },
                 nav_state = new NavigationState
                 {
                     lastVisitedNode = new RosSharp.RosBridgeClient.MessageTypes.Std.Int32(50),
@@ -90,6 +94,34 @@ namespace AGVROSEmulator.AGVRos
             rosSocket.AdvertiseService<VerticalCommandRequest, VerticalCommandResponse>("/command_action", VerticalActionCallback);
             rosSocket.AdvertiseService<VerticalCommandRequest, VerticalCommandResponse>("/command_actionm", BatteryLockActionRequestHandler);
             rosSocket.AdvertiseService<SetcurrentTagIDRequest, SetcurrentTagIDResponse>("/set_currentTagID", SetCurrentTagRequestHandler);
+            rosSocket.AdvertiseService<PinCommandRequest, PinCommandResponse>("/pin_action", PinActionRequestCallBack);
+        }
+
+        private bool PinActionRequestCallBack(PinCommandRequest tin, out PinCommandResponse tout)
+        {
+            tout = new PinCommandResponse
+            {
+                confirm = true
+            };
+            Task.Run(async () =>
+            {
+                await Task.Delay(500);
+                //call pin action done service.
+
+                rosSocket.CallService<PinCommandRequest, PinCommandResponse>("/pin_done_action",
+                    PinActionDoneCallBack, new PinCommandRequest
+                    {
+                        command = "done",
+                        model = tin.model,
+                    });
+
+            });
+            return true;
+        }
+
+        private void PinActionDoneCallBack(PinCommandResponse t)
+        {
+            Console.WriteLine(t.confirm);
         }
 
         /// <summary>
@@ -135,12 +167,36 @@ namespace AGVROSEmulator.AGVRos
 
         private bool VerticalActionCallback(VerticalCommandRequest tin, out VerticalCommandResponse tout)
         {
+
+            if (tin.command == "init" || tin.command == "orig")
+            {
+                moduleInfo.Action_Driver.position = 0;
+                _action_done();
+            }
+            else if (tin.command == "pose")
+            {
+                moduleInfo.Action_Driver.position = (float)tin.target;
+                _action_done();
+            }
             tout = new VerticalCommandResponse()
             {
                 confirm = true,
             };
 
+            async Task _action_done()
+            {
+                rosSocket.CallService<VerticalCommandRequest, VerticalCommandResponse>("/done_action", VertionActionDoneServiceCallback, new VerticalCommandRequest
+                {
+                    model = tin.model,
+                    command = "done",
+                });
+            }
+
             return true;
+        }
+
+        private void VertionActionDoneServiceCallback(VerticalCommandResponse t)
+        {
         }
 
         private bool CstReaderServiceCallack(CSTReaderCommandRequest tin, out CSTReaderCommandResponse tout)

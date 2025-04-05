@@ -33,7 +33,7 @@ namespace AGVROSEmulator.IOModule
                 PublishLaserData();
             }
         }
-        public bool IsRechargeCircuitOpened => slave.DataStore.CoilDiscretes[OutputStartAddress + 1 + (int)IOMap.SUBMARINE_IOMAP_OUTPUTS.Recharge_Circuit];
+        public bool IsRechargeCircuitOpened => slave.DataStore.CoilDiscretes[OutputStartAddress + 1 + (int)IOMap.OUTPUTS.Recharge_Circuit];
         protected ModbusTcpSlave? slave;
         RosSocket rosSocket;
         string sickOutputPathsMsgID = "";
@@ -84,9 +84,9 @@ namespace AGVROSEmulator.IOModule
                     _AGV_COMPT = value;
                     if (_AGV_COMPT)
                     {
-                        SetState(IOMap.SUBMARINE_IOMAP_INPUTS.EQ_READY, false);
-                        SetState(IOMap.SUBMARINE_IOMAP_INPUTS.EQ_L_REQ, false);
-                        SetState(IOMap.SUBMARINE_IOMAP_INPUTS.EQ_U_REQ, false);
+                        SetState(IOMap.INPUTS.EQ_READY, false);
+                        SetState(IOMap.INPUTS.EQ_L_REQ, false);
+                        SetState(IOMap.INPUTS.EQ_U_REQ, false);
                         _wait_agv_busy_to_move_out = false;
                     }
                 }
@@ -111,8 +111,8 @@ namespace AGVROSEmulator.IOModule
                     {
                         if (HSEqNoReplySimulation)
                             return;
-                        SetState(IOMap.SUBMARINE_IOMAP_INPUTS.EQ_L_REQ, true);
-                        SetState(IOMap.SUBMARINE_IOMAP_INPUTS.EQ_U_REQ, true);
+                        SetState(IOMap.INPUTS.EQ_L_REQ, true);
+                        SetState(IOMap.INPUTS.EQ_U_REQ, true);
                     }
                 }
             }
@@ -126,7 +126,7 @@ namespace AGVROSEmulator.IOModule
                 if (_AGV_TR_REQ != value)
                 {
                     _AGV_TR_REQ = value;
-                    SetState(IOMap.SUBMARINE_IOMAP_INPUTS.EQ_READY, _AGV_TR_REQ);
+                    SetState(IOMap.INPUTS.EQ_READY, _AGV_TR_REQ);
                 }
             }
         }
@@ -141,29 +141,29 @@ namespace AGVROSEmulator.IOModule
                 var inputs = slave.DataStore.CoilDiscretes.Skip(OutputStartAddress + 1).Take(64).ToArray();
                 if (!previousInputs.SequenceEqual(inputs))
                 {
-                    if (inputs[(int)IOMap.SUBMARINE_IOMAP_OUTPUTS.Safety_Relays_Reset])
+                    if (inputs[(int)IOMap.OUTPUTS.Safety_Relays_Reset])
                     {
                         EMOReset();
                         MotorsAlarmReset();
                     }
                 }
 
-                AGV_VALID = inputs[(int)IOMap.SUBMARINE_IOMAP_OUTPUTS.AGV_VALID];
+                AGV_VALID = inputs[(int)IOMap.OUTPUTS.AGV_VALID];
 
                 if (_AGVHSFlag)
                 {
-                    AGV_TR_REQ = inputs[(int)IOMap.SUBMARINE_IOMAP_OUTPUTS.AGV_TR_REQ];
-                    AGV_COMPT = inputs[(int)IOMap.SUBMARINE_IOMAP_OUTPUTS.AGV_COMPT];
+                    AGV_TR_REQ = inputs[(int)IOMap.OUTPUTS.AGV_TR_REQ];
+                    AGV_COMPT = inputs[(int)IOMap.OUTPUTS.AGV_COMPT];
 
 
-                    if (inputs[(int)IOMap.SUBMARINE_IOMAP_OUTPUTS.AGV_READY] && !_wait_agv_busy_to_move_out)
+                    if (inputs[(int)IOMap.OUTPUTS.AGV_READY] && !_wait_agv_busy_to_move_out)
                     {
                         _ = Task.Run(async () =>
                         {
                             await Task.Delay(100);
-                            SetState(IOMap.SUBMARINE_IOMAP_INPUTS.EQ_BUSY, true);
+                            SetState(IOMap.INPUTS.EQ_BUSY, true);
                             await Task.Delay(2000);
-                            SetState(IOMap.SUBMARINE_IOMAP_INPUTS.EQ_BUSY, false);
+                            SetState(IOMap.INPUTS.EQ_BUSY, false);
                             _wait_agv_busy_to_move_out = true;
                         });
                     }
@@ -207,7 +207,7 @@ namespace AGVROSEmulator.IOModule
             return Convert.ToInt32(str, 2);
         }
         protected abstract void InitializeInputState();
-        public virtual void SetState(IOMap.SUBMARINE_IOMAP_INPUTS item, bool state)
+        public virtual void SetState(IOMap.INPUTS item, bool state)
         {
             try
             {
@@ -252,44 +252,44 @@ namespace AGVROSEmulator.IOModule
 
         public virtual async void MotorsAlarm()
         {
-            SetState(IOMap.SUBMARINE_IOMAP_INPUTS.Horizon_Motor_Busy_1, false);
-            SetState(IOMap.SUBMARINE_IOMAP_INPUTS.Horizon_Motor_Alarm_1, true);
+            SetState(IOMap.INPUTS.Horizon_Motor_Busy_1, false);
+            SetState(IOMap.INPUTS.Horizon_Motor_Alarm_1, true);
 
             await Task.Delay(400);
 
-            SetState(IOMap.SUBMARINE_IOMAP_INPUTS.Horizon_Motor_Busy_2, false);
-            SetState(IOMap.SUBMARINE_IOMAP_INPUTS.Horizon_Motor_Alarm_2, true);
+            SetState(IOMap.INPUTS.Horizon_Motor_Busy_2, false);
+            SetState(IOMap.INPUTS.Horizon_Motor_Alarm_2, true);
         }
 
         public virtual void MotorsAlarmReset()
         {
-            SetState(IOMap.SUBMARINE_IOMAP_INPUTS.Horizon_Motor_Busy_1, true);
-            SetState(IOMap.SUBMARINE_IOMAP_INPUTS.Horizon_Motor_Busy_2, true);
-            SetState(IOMap.SUBMARINE_IOMAP_INPUTS.Horizon_Motor_Alarm_1, false);
-            SetState(IOMap.SUBMARINE_IOMAP_INPUTS.Horizon_Motor_Alarm_2, false);
+            SetState(IOMap.INPUTS.Horizon_Motor_Busy_1, true);
+            SetState(IOMap.INPUTS.Horizon_Motor_Busy_2, true);
+            SetState(IOMap.INPUTS.Horizon_Motor_Alarm_1, false);
+            SetState(IOMap.INPUTS.Horizon_Motor_Alarm_2, false);
         }
 
         public virtual void EmoButtonPush()
         {
-            SetState(IOMap.SUBMARINE_IOMAP_INPUTS.EMO, false);
+            SetState(IOMap.INPUTS.EMO, false);
             MotorsAlarm();
         }
         public virtual void EMOReset()
         {
-            SetState(IOMap.SUBMARINE_IOMAP_INPUTS.EMO, true);
+            SetState(IOMap.INPUTS.EMO, true);
         }
 
         public virtual void MotorSwitch(bool opened)
         {
-            SetState(IOMap.SUBMARINE_IOMAP_INPUTS.Horizon_Motor_Switch, opened);
+            SetState(IOMap.INPUTS.Horizon_Motor_Switch, opened);
         }
 
 
         public virtual async void ResetButtonPush()
         {
-            SetState(IOMap.SUBMARINE_IOMAP_INPUTS.Panel_Reset_PB, true);
+            SetState(IOMap.INPUTS.Panel_Reset_PB, true);
             await Task.Delay(200);
-            SetState(IOMap.SUBMARINE_IOMAP_INPUTS.Panel_Reset_PB, false);
+            SetState(IOMap.INPUTS.Panel_Reset_PB, false);
 
             EMOReset();
             MotorsAlarmReset();
@@ -297,12 +297,12 @@ namespace AGVROSEmulator.IOModule
 
         public virtual void EMOButtonRelease()
         {
-            SetState(IOMap.SUBMARINE_IOMAP_INPUTS.EMO, true);
+            SetState(IOMap.INPUTS.EMO, true);
         }
 
         public virtual void Bumper(bool pressed)
         {
-            SetState(IOMap.SUBMARINE_IOMAP_INPUTS.Bumper_Sensor, !pressed);
+            SetState(IOMap.INPUTS.Bumper_Sensor, !pressed);
             if (pressed)
                 EmoButtonPush();
         }
@@ -311,33 +311,33 @@ namespace AGVROSEmulator.IOModule
         {
             _AGVHSFlag = false;
             await Task.Delay(300);
-            SetState(IOMap.SUBMARINE_IOMAP_INPUTS.EQ_READY, false);
+            SetState(IOMap.INPUTS.EQ_READY, false);
         }
 
         public virtual void Handshake_Signals_Reset()
         {
-            SetState(IOMap.SUBMARINE_IOMAP_INPUTS.EQ_L_REQ, false);
-            SetState(IOMap.SUBMARINE_IOMAP_INPUTS.EQ_U_REQ, false);
-            SetState(IOMap.SUBMARINE_IOMAP_INPUTS.EQ_BUSY, false);
-            SetState(IOMap.SUBMARINE_IOMAP_INPUTS.EQ_READY, false);
+            SetState(IOMap.INPUTS.EQ_L_REQ, false);
+            SetState(IOMap.INPUTS.EQ_U_REQ, false);
+            SetState(IOMap.INPUTS.EQ_BUSY, false);
+            SetState(IOMap.INPUTS.EQ_READY, false);
         }
         public virtual void AllLaserAreaNoTrigger()
         {
-            SetState(IOMap.SUBMARINE_IOMAP_INPUTS.FrontProtection_Area_Sensor_1, true);
-            SetState(IOMap.SUBMARINE_IOMAP_INPUTS.FrontProtection_Area_Sensor_2, true);
-            SetState(IOMap.SUBMARINE_IOMAP_INPUTS.FrontProtection_Area_Sensor_3, true);
-            SetState(IOMap.SUBMARINE_IOMAP_INPUTS.FrontProtection_Area_Sensor_4, true);
+            SetState(IOMap.INPUTS.FrontProtection_Area_Sensor_1, true);
+            SetState(IOMap.INPUTS.FrontProtection_Area_Sensor_2, true);
+            SetState(IOMap.INPUTS.FrontProtection_Area_Sensor_3, true);
+            SetState(IOMap.INPUTS.FrontProtection_Area_Sensor_4, true);
 
-            SetState(IOMap.SUBMARINE_IOMAP_INPUTS.BackProtection_Area_Sensor_1, true);
-            SetState(IOMap.SUBMARINE_IOMAP_INPUTS.BackProtection_Area_Sensor_2, true);
-            SetState(IOMap.SUBMARINE_IOMAP_INPUTS.BackProtection_Area_Sensor_3, true);
-            SetState(IOMap.SUBMARINE_IOMAP_INPUTS.BackProtection_Area_Sensor_4, true);
-            SetState(IOMap.SUBMARINE_IOMAP_INPUTS.RightProtection_Area_Sensor_3, true);
-            SetState(IOMap.SUBMARINE_IOMAP_INPUTS.LeftProtection_Area_Sensor_3, true);
+            SetState(IOMap.INPUTS.BackProtection_Area_Sensor_1, true);
+            SetState(IOMap.INPUTS.BackProtection_Area_Sensor_2, true);
+            SetState(IOMap.INPUTS.BackProtection_Area_Sensor_3, true);
+            SetState(IOMap.INPUTS.BackProtection_Area_Sensor_4, true);
+            SetState(IOMap.INPUTS.RightProtection_Area_Sensor_3, true);
+            SetState(IOMap.INPUTS.LeftProtection_Area_Sensor_3, true);
         }
         public virtual void FrontLaserArea3Trigger()
         {
-            SetState(IOMap.SUBMARINE_IOMAP_INPUTS.FrontProtection_Area_Sensor_3, false);
+            SetState(IOMap.INPUTS.FrontProtection_Area_Sensor_3, false);
         }
         internal void PIO_HS_EQ_NO_REPLY()
         {
@@ -351,8 +351,13 @@ namespace AGVROSEmulator.IOModule
 
         internal void TrayNoMounted()
         {
-            SetState(IOMap.SUBMARINE_IOMAP_INPUTS.Cst_Sensor_1, true);
-            SetState(IOMap.SUBMARINE_IOMAP_INPUTS.Cst_Sensor_2, true);
+            SetState(IOMap.INPUTS.Cst_Sensor_1, true);
+            SetState(IOMap.INPUTS.Cst_Sensor_2, true);
+        }
+
+        internal void VerticalHomePose()
+        {
+            SetState(IOMap.INPUTS.Vertical_Home_Pose, true);
         }
     }
 }

@@ -5,9 +5,9 @@
         protected override void InitializeInputState()
         {
             base.InitializeInputState();
-            SetState(IOMap.SUBMARINE_IOMAP_INPUTS.Vertical_Motor_Switch, true);
-            SetState(IOMap.SUBMARINE_IOMAP_INPUTS.Vertical_Motor_Busy, true);
-
+            SetState(IOMap.INPUTS.Vertical_Motor_Switch, true);
+            SetState(IOMap.INPUTS.Vertical_Motor_Busy, true);
+            SetState(IOMap.INPUTS.Vertical_Home_Pose, true);
 
         }
     }
